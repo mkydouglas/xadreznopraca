@@ -1,0 +1,146 @@
+.principal {
+    padding: 140px 0 30px;    
+    background-color: #fbb03b;
+    --height: calc(100vh - 140px);
+}
+
+.principal__box {
+    display: flex;
+    align-items: center;
+}
+
+.principal__img {
+    width: 500px;
+}
+
+.h1 {
+    font-size: 52px;
+    font-weight: 700;
+    padding: 10px 0;
+}
+
+.h2 {
+    font-size: 48px;
+    font-weight: 700;
+    padding: 30px 0;
+    text-align: center;
+}
+
+.h3 {
+    font-weight: 700;
+    text-transform: uppercase;
+}
+
+.encontro__box {
+    border: solid 1px #fbb03b;
+    border-radius: 5px;
+    padding: 20px;
+}
+
+.encontro__item {
+    line-height: 2;
+    border-bottom: 1px solid;
+    font-size: 18px;
+    letter-spacing: 1px;
+    padding: 20px 30px;
+    display: flex;
+    align-items: center;
+}
+
+.encontro__item:last-child {
+    border: none;
+}
+
+.icone-local::before {
+    content: '\f140';
+}
+
+.icone-dia::before {
+    content: '\f073';
+}
+
+.icone-hora::before {
+    content: '\f017';
+}
+
+.icone-saude::before {
+    content: '\f21e';
+}
+
+.icone-desafio::before {
+    content: '\f5dc';
+}
+
+.icone-comunidade::before {
+    content: '\f0c0';
+}
+
+.icone-competicao::before {
+    content: '\f5a2';
+}
+
+.icone-criatividade::before {
+    content: '\f0eb';
+}
+
+.icone-tradicao::before {
+    content: '\f252';
+}
+
+.item-titulo {
+    font-weight: 700;
+    padding-right: 5px;
+}
+
+.porque__itens {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+}
+
+.porque__item {
+    padding: 20px;
+    box-shadow: 0px 0px 2px 0px #fbb03b;
+    border-radius: 5px;
+}
+
+.porque__item-titulo {
+    display: flex;
+    align-items: center;
+    font-weight: 700;
+    padding: 10px 5px 10px 40px;
+    letter-spacing: 1px;
+}
+
+.porque__item-texto {
+    line-height: 25px;
+    letter-spacing: 1px;
+    padding-top: 5px;
+}
+
+.objetivo {
+    background-color: #fcf8ec;
+}
+
+.objetivo__box {
+    display: flex;
+    align-items: center;
+    column-gap: 10px;
+}
+
+.objetivo__subtitulo {
+    font-size: 20px;
+    font-weight: 700;
+}
+
+.objetivo__texto {
+    padding-top: 10px;
+    font-size: 18px;
+    line-height: 25px;
+    letter-spacing: 1px;
+    text-indent: 30px;
+}
+
+.objetivo__img {
+    width: 500px;
+}

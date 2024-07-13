@@ -1,0 +1,70 @@
+.header {
+    width: 100%;
+    position: fixed;
+    top: 0;
+    z-index: 9999;
+}
+
+.nav {
+    display: flex;
+    justify-content: space-around;
+    background-color: #fbb03b;
+    max-width: 1200px;
+    width: 80%;
+    height: 80px;
+    box-shadow: 1px 1px 6px 0px black;
+    border-radius: 5px;
+    margin: 20px auto 20px;
+}
+
+.logo {
+    width: 60px;
+}
+
+.ul {
+    list-style: none;
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+    padding: 10px;
+
+    .li {
+        padding: 5px 10px;
+        font-size: 20px;
+
+        .link {
+            color: black;
+            transition: .4s;
+        }
+
+        .link:hover {
+            color: white;
+        }
+    }
+}
+
+.footer__box {
+    width: 80%;
+    margin: auto;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    column-gap: 10%;
+    padding: 30px 0;
+}
+
+.footer__topico-titulo {
+    font-size: 20px;
+    font-weight: 700;
+    padding-bottom: 20px;
+}
+
+.footer__topico-item {
+    display: flex;
+    align-items: center;
+    padding-left: 30px;
+}
+
+.icone-insta::before {
+    content: '\23';
+}
