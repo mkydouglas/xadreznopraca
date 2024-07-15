@@ -9,8 +9,9 @@
     align-items: center;
 }
 
+.principal__box-img,
 .principal__img {
-    width: 500px;
+    width: 100%;
 }
 
 .h1 {
@@ -57,6 +58,7 @@
 
 .icone-dia::before {
     content: '\f073';
+    bottom: 16px;
 }
 
 .icone-hora::before {
@@ -143,4 +145,23 @@
 
 .objetivo__img {
     width: 500px;
+}
+
+@media (max-width: 655px) {
+
+    .h1 {
+        font-size: 34px;
+    }
+
+    .h2 {
+        font-size: 24px;
+    }
+
+    .porque__itens {
+		grid-template-columns: 1fr;
+	}
+
+    .objetivo__img {
+        width: 100%;
+    }
 }

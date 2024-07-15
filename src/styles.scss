@@ -74,3 +74,14 @@ body {
     position: absolute;
     left: 0;
 }
+
+@media (max-width: 1024px) {
+	.principal__box-img {
+		display: none;
+	}
+
+	.objetivo__box {
+		flex-wrap: wrap;
+		justify-content: center;
+	}
+}
