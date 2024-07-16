@@ -6,6 +6,10 @@ const routes: Routes = [
   {
     path: '',
     component: HomeComponent
+  },
+  { 
+    path: 'relogio', 
+    loadChildren: () => import('./relogio/relogio.module').then(m => m.RelogioModule) 
   }
 ];
 
