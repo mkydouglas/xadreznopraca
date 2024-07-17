@@ -1,11 +1,21 @@
-<section style="padding-top: 150px;text-align: center;">
-    <div>
-        <div (click)="pausarRelogio(1)" style="height: 50vh; background-color: aquamarine;">
+<section class="relogios">
+    <div class="relogio__box">
+        <div (click)="pausarRelogio(1)" class="relogio relogio__acima">
             <span style="display: block;width: 100%;">{{tempoBrancasFormatado}}</span>
         </div>
-        <div></div>
-        <div (click)="pausarRelogio(2)" style="height: 50vh; background-color: aqua;">
+        <div class="relogio__opcoes">
+            <i class="fa-solid fa-clock-rotate-left"></i>
+            <i class="fa-solid fa-pause"></i>
+            <i class="fa-solid fa-stopwatch" (click)="openDialog()"></i>
+            
+        </div>
+        <div (click)="pausarRelogio(2)" class="relogio">
             <span style="display: block;width: 100%;">{{tempoNegrasFormatado}}</span>
         </div>
     </div>
+    <div *ngIf="formData">
+        <p>Nome: {{ formData.name }}</p>
+        <p>Email: {{ formData.email }}</p>
+        <p>Mensagem: {{ formData.message }}</p>
+      </div>
 </section>

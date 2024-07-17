@@ -1,0 +1,22 @@
+<h1 mat-dialog-title>Tempo da Partida</h1>
+<div mat-dialog-content>
+  <form [formGroup]="form" (ngSubmit)="onSubmit()">
+        <div class="tempo">
+            <label>Tempo</label>
+            <div class="tempo__box">
+                <input  formControlName="minutos" placeholder="00" maxlength="2" class="tempo__input">
+                <span class="tempo__doispontos">:</span>
+                <input  formControlName="segundos" placeholder="00" maxlength="2" class="tempo__input">
+            </div>
+        </div>
+        <div class="tempo">
+            <label class="tempo__label">Incremento</label>
+            <div class="tempo__box">
+                <input matInput formControlName="incrementoMinutos" placeholder="00" maxlength="2" class="tempo__input">
+                <span class="tempo__doispontos">:</span>
+                <input matInput formControlName="incrementoSegundos" placeholder="00" maxlength="2" class="tempo__input">
+            </div> 
+        </div>
+    <button mat-button type="submit" [disabled]="form.invalid" class="tempo__salvar">Salvar</button>
+  </form>
+</div>

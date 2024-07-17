@@ -1,5 +1,7 @@
 import { Component } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
 import { interval, Subscription, Timestamp } from 'rxjs';
+import { TempoDialogComponent } from './tempo-dialog/tempo-dialog.component';
 
 @Component({
   selector: 'app-relogio',
@@ -22,9 +24,11 @@ export class RelogioComponent {
 
   public tempoBrancasFormatado = this.formatarTempo(this.tempoBrancas);
   public tempoNegrasFormatado = this.formatarTempo(this.tempoNegras);
+  formData: any;
+
+  constructor(public dialog: MatDialog){}
 
   pausarRelogio(jogador: number){
-    debugger
     this.jogoIniciado = this.jogoIniciado ? this.jogoIniciado : !this.relogioBrancasAtivo && !this.relogioNegrasAtivo;
 
     if(jogador == 1 && (this.jogoIniciado || this.relogioBrancasAtivo)){
@@ -43,8 +47,11 @@ export class RelogioComponent {
     }
   }
 
-  despausarRelogio(){
-    
+  pararRelogio(){
+    this.tempoNegrasSubscription?.unsubscribe();
+    this.tempoNegrasSubscription = null;
+    this.tempoBrancasSubscription?.unsubscribe();
+    this.tempoBrancasSubscription = null;
   }
 
   contadorBrancas(){
@@ -90,5 +97,20 @@ export class RelogioComponent {
   private pad(num: number, size: number): string {
     let s = "000" + num;
     return s.substr(s.length - size);
+  }
+
+  openDialog(): void {
+    const dialogRef = this.dialog.open(TempoDialogComponent, {
+      width: '40%',
+      data: {}
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        console.log(result);
+        
+        this.formData = result;
+      }
+    });
   }
 }

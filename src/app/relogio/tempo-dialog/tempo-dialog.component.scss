@@ -1,0 +1,42 @@
+.tempo {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin: 20px 0;
+}
+
+.tempo__box {
+    position: relative;
+}
+
+.tempo__label {
+    font-size: 18px;
+}
+
+.tempo__input {
+    width: 30px;
+    height: 30px;
+    text-align: center;
+    font-size: 18px;
+    border-radius: 2px;
+    border: 1px solid #fbb03b;
+    outline: none;
+}
+
+.tempo__input:nth-child(1) {
+    margin-right: 15px;
+}
+
+.tempo__doispontos {
+    font-size: 32px;
+    font-weight: 700;
+    color: #fbb03b;
+    position: absolute;
+    left: 39px;
+    top: 3px;
+}
+
+.tempo__salvar {
+    border: 1px solid #fbb03b;
+    font-size: 16px;
+}
