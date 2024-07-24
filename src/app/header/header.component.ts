@@ -1,11 +1,11 @@
 import { AfterViewInit, Component } from '@angular/core';
 
 @Component({
-  selector: 'app-root',
-  templateUrl: './app.component.html',
-  styleUrls: ['./app.component.scss']
+  selector: 'app-header',
+  templateUrl: './header.component.html',
+  styleUrls: ['./header.component.scss']
 })
-export class AppComponent implements AfterViewInit {
+export class HeaderComponent implements AfterViewInit {
   title = 'XadrezNoPraca';
   menuHamburguer!: HTMLInputElement;
   menuBox!: HTMLElement;

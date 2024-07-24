@@ -10,11 +10,21 @@ const routes: Routes = [
   { 
     path: 'relogio', 
     loadChildren: () => import('./relogio/relogio.module').then(m => m.RelogioModule) 
+  },
+  { 
+    path: 'construindo', 
+    loadChildren: () => import('./construindo/construindo.module').then(m => m.ConstruindoModule) 
+  },
+  { 
+    path: '**', 
+    loadChildren: () => import('./not-found/not-found.module').then(m => m.NotFoundModule) 
   }
 ];
 
 @NgModule({
-  imports: [RouterModule.forRoot(routes)],
+  imports: [RouterModule.forRoot(routes, {
+    scrollPositionRestoration: 'enabled'
+  })],
   exports: [RouterModule]
 })
 export class AppRoutingModule { }

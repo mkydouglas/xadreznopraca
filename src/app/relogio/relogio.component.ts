@@ -1,6 +1,10 @@
-import { Component } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { interval, Subscription, Timestamp } from 'rxjs';
+import { DispositivoService } from '../services/dispositivo.service';
+import { ConfirmacaoDialogComponent } from './confirmacao-dialog/confirmacao-dialog.component';
+import { Relogio } from './relogio';
+import { SugestaoPlataformaDialogComponent } from './sugestao-plataforma-dialog/sugestao-plataforma-dialog.component';
 import { TempoDialogComponent } from './tempo-dialog/tempo-dialog.component';
 
 @Component({
@@ -8,27 +12,63 @@ import { TempoDialogComponent } from './tempo-dialog/tempo-dialog.component';
   templateUrl: './relogio.component.html',
   styleUrls: ['./relogio.component.scss']
 })
-export class RelogioComponent {
+export class RelogioComponent implements OnInit, AfterViewInit ,OnDestroy {
+  @ViewChild('acima') acimaDiv!: ElementRef;
+  @ViewChild('abaixo') abaixoDiv!: ElementRef;
+  divAcima!: any;
+  divAbaixo!: any;
 
   jogoIniciado = false;
   
   private tempoBrancasSubscription: Subscription | null = null;
   private tempoBrancasSobra = 9;
-  private tempoBrancas: number = 600;
+  private tempoBrancas: number = 0;
   private relogioBrancasAtivo = false;
   
   private tempoNegrasSubscription: Subscription | null = null;
   private tempoNegrasSobra = 9;
-  private tempoNegras: number = 600;
+  private tempoNegras: number = 0;
   private relogioNegrasAtivo = false;
 
   public tempoBrancasFormatado = this.formatarTempo(this.tempoBrancas);
   public tempoNegrasFormatado = this.formatarTempo(this.tempoNegras);
-  formData: any;
+  relogio!: Relogio;
+  qtdeMovimentosBrancas = 0;
+  qtdeMovimentosNegras = 0;
+  isDesktop!: boolean;
 
-  constructor(public dialog: MatDialog){}
+  constructor(
+    public dialog: MatDialog,
+    public dispositivoService: DispositivoService
+  ){}
 
-  pausarRelogio(jogador: number){
+  ngOnInit(): void {
+    this.isDesktop = this.dispositivoService.isDesktop();   
+  }
+
+  ngAfterViewInit(): void {
+    if(this.isDesktop)
+      this.abrirSugestaoPlataforma();
+    
+    this.divAcima = this.acimaDiv.nativeElement;
+    this.divAbaixo = this.abaixoDiv.nativeElement;
+  }
+
+  ngOnDestroy(): void {
+    this.pararRelogio();
+  }
+
+  manipularRelogio(jogador: number){
+    if(this.tempoBrancas == 0 && this.tempoNegras == 0){
+      this.abrirTempoDialog();
+      return;
+    }
+
+    if(!this.tempoBrancas || !this.tempoNegras){
+      this.reiniciarRelogio();
+      return;
+    }
+
     this.jogoIniciado = this.jogoIniciado ? this.jogoIniciado : !this.relogioBrancasAtivo && !this.relogioNegrasAtivo;
 
     if(jogador == 1 && (this.jogoIniciado || this.relogioBrancasAtivo)){
@@ -36,14 +76,30 @@ export class RelogioComponent {
       this.tempoNegrasSubscription = null;
       this.relogioBrancasAtivo = false;
       this.relogioNegrasAtivo = true;
+      this.divAbaixo.classList.add('relogio__ativo');
+      this.divAcima.classList.remove('relogio__ativo');
       this.contadorNegras();
+      if(this.relogio.tempoIncremento > 0 && this.tempoBrancas != this.relogio.tempo){
+        this.tempoBrancas += this.relogio.tempoIncremento;
+        this.tempoBrancasFormatado = this.formatarTempo(this.tempoBrancas);
+      }
+      if(this.tempoBrancas != this.relogio.tempo)
+        this.qtdeMovimentosBrancas++;
     }
     else if(jogador == 2 && (this.jogoIniciado || this.relogioNegrasAtivo)){
       this.tempoBrancasSubscription?.unsubscribe();
       this.tempoBrancasSubscription = null;
       this.relogioBrancasAtivo = true;
       this.relogioNegrasAtivo = false;
+      this.divAcima.classList.add('relogio__ativo');
+      this.divAbaixo.classList.remove('relogio__ativo');
       this.contadorBrancas();
+      if(this.relogio.tempoIncremento > 0 && this.tempoNegras != this.relogio.tempo){
+        this.tempoNegras += this.relogio.tempoIncremento;
+        this.tempoNegrasFormatado = this.formatarTempo(this.tempoNegras);
+      }
+      if(this.tempoNegras != this.relogio.tempo)
+        this.qtdeMovimentosNegras++;
     }
   }
 
@@ -54,17 +110,31 @@ export class RelogioComponent {
     this.tempoBrancasSubscription = null;
   }
 
+  async reiniciarRelogio(){
+    this.pararRelogio();
+    const confirmacao = await this.abrirConfirmacaoDialog();
+    console.log(confirmacao);
+    
+    if(!confirmacao)
+      return;
+    
+    this.inserirTempo();
+    this.reiniciarQtdeMovimentos();    
+  }
+
   contadorBrancas(){
-    if (this.tempoBrancasSubscription === null) {
+    if(this.tempoBrancasSubscription === null) {
       this.tempoBrancasSubscription = interval(100).subscribe(() => {
         if(this.relogioBrancasAtivo){
           if(this.tempoBrancasSobra > 0)
-          this.tempoBrancasSobra--;  
-          else        
-            this.tempoBrancas--;
-  
+            this.tempoBrancasSobra--;  
+          else{
+            if(this.tempoBrancas)
+              this.tempoBrancas--;
+          }
+
           this.tempoBrancasFormatado = this.formatarTempo(this.tempoBrancas);
-        }      
+        }
       });
     }
   }
@@ -74,15 +144,48 @@ export class RelogioComponent {
       this.tempoNegrasSubscription = interval(100).subscribe(() => {
         if(this.relogioNegrasAtivo){
           if(this.tempoNegrasSobra > 0)
-            this.tempoNegrasSobra--;  
-          else
-            this.tempoNegras--;
+            this.tempoNegrasSobra--;
+          else{
+            if(this.tempoNegras)
+              this.tempoNegras--;
+          }
   
           this.tempoNegrasFormatado = this.formatarTempo(this.tempoNegras);
         }
-        
       });
     }
+  }
+  
+  abrirTempoDialog(): void {
+    this.pararRelogio();
+
+    const tempoDialog = this.dialog.open<TempoDialogComponent, any, Relogio>(TempoDialogComponent, {
+      panelClass: 'popup'
+    });
+
+    tempoDialog.afterClosed().subscribe(result => {
+      if (result) {
+        this.relogio = Object.assign(new Relogio, result);
+        this.relogio.calcularTempo();
+        this.inserirTempo();
+        this.reiniciarQtdeMovimentos();        
+      }
+    });
+  }
+
+  abrirConfirmacaoDialog(): Promise<boolean>{
+    return new Promise<boolean>((resolve) => {
+      const confDialog = this.dialog.open(ConfirmacaoDialogComponent, {
+      });
+  
+      confDialog.afterClosed().subscribe(result => {
+        resolve(result);
+      });
+    });
+  }
+
+  abrirSugestaoPlataforma(){
+    this.dialog.open(SugestaoPlataformaDialogComponent, { });
   }
 
   formatarTempo(tempo: number) {
@@ -91,7 +194,12 @@ export class RelogioComponent {
     const minutes = Math.floor((tempo / (10 * 60)) % 60);
     const horas = Math.floor((tempo / (10 * 60 * 60)) % 60);
 
-    return `${this.pad(horas, 2)}:${this.pad(minutes, 2)}:${this.pad(seconds, 2)}.${this.pad(milliseconds, 1)}`;
+    if(horas > 0)
+      return `${this.pad(horas, 2)}:${this.pad(minutes, 2)}:${this.pad(seconds, 2)}`;
+    else if(minutes == 0 && seconds < 10)
+      return `${this.pad(minutes, 2)}:${this.pad(seconds, 2)}.${this.pad(milliseconds, 1)}`
+    else
+      return `${this.pad(minutes, 2)}:${this.pad(seconds, 2)}`;
   }
 
   private pad(num: number, size: number): string {
@@ -99,18 +207,13 @@ export class RelogioComponent {
     return s.substr(s.length - size);
   }
 
-  openDialog(): void {
-    const dialogRef = this.dialog.open(TempoDialogComponent, {
-      width: '40%',
-      data: {}
-    });
+  inserirTempo(){
+    this.tempoBrancasSobra = this.tempoNegrasSobra = 9;
+    this.tempoBrancas = this.tempoNegras = this.relogio.tempo;
+    this.tempoBrancasFormatado = this.tempoNegrasFormatado = this.formatarTempo(this.relogio.tempo);
+  }
 
-    dialogRef.afterClosed().subscribe(result => {
-      if (result) {
-        console.log(result);
-        
-        this.formData = result;
-      }
-    });
+  reiniciarQtdeMovimentos() {
+    this.qtdeMovimentosBrancas = this.qtdeMovimentosNegras = 0;
   }
 }

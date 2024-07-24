@@ -1,6 +1,7 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { Relogio } from '../relogio';
 
 @Component({
   selector: 'app-tempo-dialog',
@@ -24,8 +25,6 @@ export class TempoDialogComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    
-
     this.form.valueChanges.subscribe(x => {
       if((this.form.value.minutos === '' && this.form.value.segundos === '')
           && (this.form.value.incrementoMinutos !== '' || this.form.value.incrementoSegundos !== ''))
@@ -40,7 +39,7 @@ export class TempoDialogComponent implements OnInit {
 
   onSubmit() {
     if (this.form.valid) {
-      this.dialogRef.close(this.form.value);
+      this.dialogRef.close(this.form.value as Relogio);
     }
   }
 

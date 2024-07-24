@@ -9,12 +9,16 @@ import { MatDialogModule } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { ReactiveFormsModule } from '@angular/forms';
+import { ConfirmacaoDialogComponent } from './confirmacao-dialog/confirmacao-dialog.component';
+import { SugestaoPlataformaDialogComponent } from './sugestao-plataforma-dialog/sugestao-plataforma-dialog.component';
 
 
 @NgModule({
   declarations: [
     RelogioComponent,
-    TempoDialogComponent
+    TempoDialogComponent,
+    ConfirmacaoDialogComponent,
+    SugestaoPlataformaDialogComponent
   ],
   imports: [
     CommonModule,

@@ -8,6 +8,7 @@
 .relogio__box {
     height: 99%;
     width: 80%;
+    max-width: 1200px;
     margin: auto;
     box-shadow: 0 0 10px;
     border-radius: 5px;
@@ -42,4 +43,14 @@
 
 .relogio__acima {
     transform: rotate(180deg);
+}
+
+.relogio__ativo {
+    background-color: #009b00;
+}
+
+@media (max-width: 655px) {
+    .relogio__box {
+        width: calc(80% + 20px);
+    }
 }
