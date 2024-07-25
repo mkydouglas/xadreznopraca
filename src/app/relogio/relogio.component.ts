@@ -119,7 +119,6 @@ export class RelogioComponent implements OnInit, AfterViewInit ,OnDestroy {
     
     this.inserirTempo();
     this.reiniciarQtdeMovimentos();
-    this.removerClasseCss();
   }
 
   contadorBrancas(){
@@ -168,8 +167,7 @@ export class RelogioComponent implements OnInit, AfterViewInit ,OnDestroy {
         this.relogio = Object.assign(new Relogio, result);
         this.relogio.calcularTempo();
         this.inserirTempo();
-        this.reiniciarQtdeMovimentos();       
-        this.removerClasseCss(); 
+        this.reiniciarQtdeMovimentos();
       }
     });
   }
@@ -219,6 +217,7 @@ export class RelogioComponent implements OnInit, AfterViewInit ,OnDestroy {
   }
 
   removerClasseCss(){
-
+    this.divAcima.classList.remove('relogio__ativo');
+    this.divAbaixo.classList.remove('relogio__ativo');
   }
 }
