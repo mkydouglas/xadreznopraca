@@ -49,6 +49,10 @@
     background-color: #009b00;
 }
 
+.relogio__fim {
+    background-color: #e70000;
+}
+
 @media (max-width: 655px) {
     .relogio__box {
         width: calc(80% + 20px);

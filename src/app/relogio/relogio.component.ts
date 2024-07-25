@@ -13,10 +13,10 @@ import { TempoDialogComponent } from './tempo-dialog/tempo-dialog.component';
   styleUrls: ['./relogio.component.scss']
 })
 export class RelogioComponent implements OnInit, AfterViewInit ,OnDestroy {
-  @ViewChild('acima') acimaDiv!: ElementRef;
-  @ViewChild('abaixo') abaixoDiv!: ElementRef;
-  divAcima!: any;
-  divAbaixo!: any;
+  @ViewChild('acima') acimaDiv!: ElementRef<HTMLElement>;
+  @ViewChild('abaixo') abaixoDiv!: ElementRef<HTMLElement>;
+  divAcima!: HTMLElement;
+  divAbaixo!: HTMLElement;
 
   jogoIniciado = false;
   
@@ -103,12 +103,10 @@ export class RelogioComponent implements OnInit, AfterViewInit ,OnDestroy {
     }
   }
 
-  pararRelogio(){
-    this.tempoNegrasSubscription?.unsubscribe();
-    this.tempoNegrasSubscription = null;
-    this.tempoBrancasSubscription?.unsubscribe();
-    this.tempoBrancasSubscription = null;
-    this.removerClasseCss();
+  pararRelogio(){    
+    this.cancelarSubscription(this.tempoBrancasSubscription);
+    this.cancelarSubscription(this.tempoNegrasSubscription);
+    this.removerClasseRelogioAtivo();
   }
 
   async reiniciarRelogio(){
@@ -117,6 +115,7 @@ export class RelogioComponent implements OnInit, AfterViewInit ,OnDestroy {
     if(!confirmacao)
       return;
     
+    this.removerClasseRelogioFim();
     this.inserirTempo();
     this.reiniciarQtdeMovimentos();
   }
@@ -130,6 +129,8 @@ export class RelogioComponent implements OnInit, AfterViewInit ,OnDestroy {
           else{
             if(this.tempoBrancas)
               this.tempoBrancas--;
+            else
+              this.terminarJogo();
           }
 
           this.tempoBrancasFormatado = this.formatarTempo(this.tempoBrancas);
@@ -147,6 +148,8 @@ export class RelogioComponent implements OnInit, AfterViewInit ,OnDestroy {
           else{
             if(this.tempoNegras)
               this.tempoNegras--;
+            else
+              this.terminarJogo();
           }
   
           this.tempoNegrasFormatado = this.formatarTempo(this.tempoNegras);
@@ -166,6 +169,7 @@ export class RelogioComponent implements OnInit, AfterViewInit ,OnDestroy {
       if (result) {
         this.relogio = Object.assign(new Relogio, result);
         this.relogio.calcularTempo();
+        this.removerClasseRelogioFim();
         this.inserirTempo();
         this.reiniciarQtdeMovimentos();
       }
@@ -216,8 +220,32 @@ export class RelogioComponent implements OnInit, AfterViewInit ,OnDestroy {
     this.qtdeMovimentosBrancas = this.qtdeMovimentosNegras = 0;
   }
 
-  removerClasseCss(){
+  cancelarSubscription(subscription: Subscription | null){
+    subscription?.unsubscribe();
+    subscription = null;
+  }
+
+  removerClasseRelogioAtivo(){
     this.divAcima.classList.remove('relogio__ativo');
     this.divAbaixo.classList.remove('relogio__ativo');
+  }
+
+  removerClasseRelogioFim(){
+    this.divAcima.classList.remove('relogio__fim');
+    this.divAbaixo.classList.remove('relogio__fim');
+  }
+
+  terminarJogo() {
+    if(this.divAcima.classList.contains('relogio__ativo')){      
+      this.divAcima.classList.remove('relogio__ativo');
+      this.divAcima.classList.add('relogio__fim');
+    }
+    else{
+      this.divAbaixo.classList.remove('relogio__ativo');
+      this.divAbaixo.classList.add('relogio__fim');
+    }
+    
+    this.cancelarSubscription(this.tempoBrancasSubscription);
+    this.cancelarSubscription(this.tempoNegrasSubscription);
   }
 }
