@@ -108,18 +108,18 @@ export class RelogioComponent implements OnInit, AfterViewInit ,OnDestroy {
     this.tempoNegrasSubscription = null;
     this.tempoBrancasSubscription?.unsubscribe();
     this.tempoBrancasSubscription = null;
+    this.removerClasseCss();
   }
 
   async reiniciarRelogio(){
     this.pararRelogio();
-    const confirmacao = await this.abrirConfirmacaoDialog();
-    console.log(confirmacao);
-    
+    const confirmacao = await this.abrirConfirmacaoDialog();    
     if(!confirmacao)
       return;
     
     this.inserirTempo();
-    this.reiniciarQtdeMovimentos();    
+    this.reiniciarQtdeMovimentos();
+    this.removerClasseCss();
   }
 
   contadorBrancas(){
@@ -168,7 +168,8 @@ export class RelogioComponent implements OnInit, AfterViewInit ,OnDestroy {
         this.relogio = Object.assign(new Relogio, result);
         this.relogio.calcularTempo();
         this.inserirTempo();
-        this.reiniciarQtdeMovimentos();        
+        this.reiniciarQtdeMovimentos();       
+        this.removerClasseCss(); 
       }
     });
   }
@@ -215,5 +216,9 @@ export class RelogioComponent implements OnInit, AfterViewInit ,OnDestroy {
 
   reiniciarQtdeMovimentos() {
     this.qtdeMovimentosBrancas = this.qtdeMovimentosNegras = 0;
+  }
+
+  removerClasseCss(){
+
   }
 }
